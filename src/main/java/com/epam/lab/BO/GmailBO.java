@@ -1,22 +1,52 @@
 package com.epam.lab.BO;
 
-import com.epam.lab.DAO.GmailDAO;
+import com.epam.lab.DAO.GmailMainPO;
+import com.epam.lab.DAO.GmailSentMailPO;
+import com.epam.lab.DAO.GmailWelcomePO;
+import com.epam.lab.DAO.MailPO;
+import com.epam.lab.Model.Mail;
 import io.appium.java_client.android.AndroidDriver;
+import org.springframework.util.Assert;
 
 public class GmailBO {
-  private GmailDAO gmailDAO;
+  private GmailWelcomePO gmailWelcomePO;
+  private GmailMainPO gmailMainPO;
+  private GmailSentMailPO gmailSentMailPO;
+  private MailPO mailPO;
 
   public GmailBO(AndroidDriver driver){
-    gmailDAO = new GmailDAO(driver);
+    gmailWelcomePO = new GmailWelcomePO(driver);
+    gmailMainPO = new GmailMainPO(driver);
+    gmailSentMailPO = new GmailSentMailPO(driver);
+    mailPO = new MailPO(driver);
   }
 
   public GmailBO signIn(){
-    gmailDAO.gotIt();
+    gmailWelcomePO.clickGotIt();
+    gmailWelcomePO.clickActionDone();
+    gmailWelcomePO.clickDismissButton();
+    gmailWelcomePO.clickDismissButton();
     return this;
   }
 
-  public GmailBO writeEmail(String email, String subject, String body){
-    gmailDAO.writeEmail().fillEmail(email).fillSubject(subject).fillText(body);
+  public GmailBO sentEmail(Mail email){
+    gmailMainPO.clickComposeButton();
+    gmailSentMailPO.gotItSmartComposeNotification();
+    gmailSentMailPO.fillAddressMail(email.getAddress());
+    gmailSentMailPO.fillSubjectMail(email.getSubject());
+    gmailSentMailPO.fillBodyMail(email.getBody());
+    gmailSentMailPO.sentMail();
+    return this;
+  }
+
+  public GmailBO verifyMailIsSent(Mail email) {
+    gmailMainPO.openMenu();
+    gmailMainPO.openSentMailActivity();
+    gmailMainPO.openLastSentMail();
+    boolean isSameSubject = mailPO.readMailSubject().contains(email.getSubject());
+    boolean isSameAddress = mailPO.readMailAddress().equalsIgnoreCase(email.getAddress());
+//    boolean isSameBody = mailPO.readMailBody().equalsIgnoreCase(email.getBody());
+    Assert.isTrue(isSameSubject && isSameAddress /*&& isSameBody*/, "Mail is not in 'Sent' folder");
     return this;
   }
 }

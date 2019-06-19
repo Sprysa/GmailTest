@@ -2,32 +2,32 @@ package com.epam.lab.Model;
 
 public class Mail {
 
-  private String email;
-  private String subj;
+  private String address;
+  private String subject;
   private String body;
 
   public Mail() {}
 
-  public Mail(String email, String subj, String body) {
-    this.email = email;
-    this.subj = subj;
+  public Mail(String address, String subject, String body) {
+    this.address = address;
+    this.subject = subject;
     this.body = body;
   }
 
-  public String getEmail() {
-    return email;
+  public String getAddress() {
+    return address;
   }
 
-  public void setEmail(String email) {
-    this.email = email;
+  public void setAddress(String address) {
+    this.address = address;
   }
 
-  public String getSubj() {
-    return subj;
+  public String getSubject() {
+    return subject;
   }
 
-  public void setSubj(String subj) {
-    this.subj = subj;
+  public void setSubject(String subject) {
+    this.subject = subject;
   }
 
   public String getBody() {
