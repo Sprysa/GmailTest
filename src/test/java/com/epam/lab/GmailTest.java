@@ -18,8 +18,7 @@ import org.testng.annotations.Test;
 public class GmailTest {
 
   private AndroidDriver driver;
-//  public static final Logger LOG = LogManager.getLogger((String)GmailTest.class);
-  Logger LOG = Logger.getLogger(String.valueOf(GmailTest.class));
+  private Logger LOG = Logger.getLogger(String.valueOf(GmailTest.class));
 
   @BeforeTest
   private void init() {
@@ -35,24 +34,24 @@ public class GmailTest {
       e.printStackTrace();
     }
     driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    LOG.info("START TESTING.");
   }
 
   @Test
   public void testGmailBO(){
     Mail mail = new Mail(EMAIL_ADDRESS, SUBJECT, BODY);
     GmailBO gmail = new GmailBO(driver);
-    LOG.info("START TESTING.");
     LOG.info("Step 1. Sign in to Gmail.");
     gmail.signIn();
     LOG.info("Step 2. Create and send mail.");
     gmail.sentEmail(mail);
     LOG.info("Step 3. Verify that mail is in 'Sent' folder.");
     gmail.verifyMailIsSent(mail);
-    LOG.info("END TESTING.");
   }
 
   @AfterTest
   private void deinit() {
+    LOG.info("END TESTING.");
     driver.quit();
   }
 }
